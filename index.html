@@ -2,403 +2,607 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-w_idth, initial-scale=1.0">
-    <title>Vivek Jain - Software Engineer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivek Jain | Backend Engineer</title>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Google Sans"', '"Open Sans"', 'sans-serif'],
+                        mono: ['"Roboto Mono"', 'monospace'],
+                    },
+                    colors: {
+                        google: {
+                            blue: '#1a73e8',
+                            dark: '#131314',
+                            card: '#1E1F20',
+                            surface: '#2D2E30',
+                            text: '#E3E3E3',
+                            subtext: '#9AA0A6'
+                        }
+                    },
+                    backgroundImage: {
+                        'gemini-gradient': 'linear-gradient(93deg, #4285F4 0%, #9B72CB 50%, #D96570 100%)',
+                        'gemini-text': 'linear-gradient(93deg, #A8C7FA 0%, #D0BCFF 50%, #F8A5B3 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
-        /* Custom Styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a192f;
-            color: #ccd6f6;
-        }
-        .glass-effect {
-            background: rgba(23, 39, 64, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(45, 212, 191, 0.2);
-        }
-        .text-teal {
-            color: #38b2ac;
-        }
-        .bg-teal {
-            background-color: #38b2ac;
-        }
-        .border-teal {
-            border-color: #38b2ac;
-        }
-        .skill-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(56, 178, 172, 0.2), 0 4px 6px -2px rgba(56, 178, 172, 0.1);
-        }
-        .project-card:hover {
-            border-color: #38b2ac;
-        }
-        .nav-link::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 2px;
-            background: #38b2ac;
-            transition: width .3s;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .scroll-reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        
+        .gemini-border { position: relative; background: #1E1F20; border-radius: 1.5rem; z-index: 1; }
+        .gemini-border::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: 1.6rem; background: linear-gradient(90deg, rgba(66,133,244,0.3) 0%, rgba(155,114,203,0.3) 50%, rgba(217,101,112,0.3) 100%); }
     </style>
 </head>
-<body class="antialiased leading-relaxed">
+<body class="bg-[#f8f9fa] text-[#1f1f1f] dark:bg-[#131314] dark:text-[#E3E3E3]">
+    <div id="root"></div>
 
-    <!-- Header & Navigation -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-effect">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#hero" class="text-2xl font-bold text-teal">VJ</a>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#about" class="nav-link text-lg">About</a>
-                <a href="#experience" class="nav-link text-lg">Experience</a>
-                <a href="#projects" class="nav-link text-lg">Projects</a>
-                <a href="#contact" class="nav-link text-lg">Contact</a>
-            </div>
-             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-button" class="md:hidden text-2xl">
-                <i class="fas fa-bars"></i>
-            </button>
-        </nav>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-             <a href="#about" class="block py-2 text-lg">About</a>
-             <a href="#experience" class="block py-2 text-lg">Experience</a>
-             <a href="#projects" class="block py-2 text-lg">Projects</a>
-             <a href="#contact" class="block py-2 text-lg">Contact</a>
-        </div>
-    </header>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const apiKey = ""; 
 
-    <main class="container mx-auto px-6">
+        // --- ICONS ---
+        const Icon = ({ path, size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                {path}
+            </svg>
+        );
 
-        <!-- Hero Section -->
-        <section id="hero" class="min-h-screen flex items-center">
-            <div class="max-w-3xl">
-                <p class="text-teal text-lg md:text-xl mb-4 scroll-reveal">Hi, my name is</p>
-                <h1 class="text-4xl md:text-7xl font-bold text-slate-100 mb-4 scroll-reveal" style="transition-delay: 100ms;">Vivek Jain.</h1>
-                <h2 class="text-4xl md:text-6xl font-bold text-slate-400 mb-8 scroll-reveal" style="transition-delay: 200ms;">I build things for the web.</h2>
-                <p class="text-lg md:text-xl max-w-2xl mb-8 scroll-reveal" style="transition-delay: 300ms;">
-                    I'm a passionate Software Engineer specializing in backend development. I focus on building robust, scalable systems and solving complex problems with efficient, clean code.
-                </p>
-                <a href="#contact" class="inline-block bg-transparent border border-teal text-teal font-semibold py-3 px-6 rounded-lg hover:bg-teal hover:text-white transition-colors duration-300 scroll-reveal" style="transition-delay: 400ms;">
-                    Get In Touch
-                </a>
-            </div>
-        </section>
+        const Icons = {
+            Mail: <><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></>,
+            Linkedin: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></>,
+            Github: <><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></>,
+            Link: <><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></>,
+            ArrowRight: <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>,
+            ArrowLeft: <><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></>,
+            Code: <><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></>,
+            Sparkles: <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"/>,
+            Send: <><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9"/></>,
+            X: <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
+            Sun: <><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></>,
+            Moon: <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>,
+            Zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+            Database: <><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></>,
+            Server: <><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></>,
+            Cpu: <><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></>,
+            Search: <><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>
+        };
 
-        <!-- About Section -->
-        <section id="about" class="py-24">
-            <h2 class="text-3xl font-bold text-slate-100 mb-12 flex items-center scroll-reveal">
-                <span class="text-teal mr-4">01.</span> About Me
-                <span class="flex-grow h-px bg-slate-700 ml-6"></span>
-            </h2>
-
-            <div class="grid md:grid-cols-5 gap-12">
-                <div class="md:col-span-3 text-lg scroll-reveal">
-                    <p class="mb-4">
-                        Hello! I'm Vivek, a software engineer with a strong foundation in computer science and a passion for creating high-performance backend services. My journey began with a Master's in Computer Applications from Kumaaraaguru College of Technology, where I dove deep into algorithms, data structures, and system design.
-                    </p>
-                    <p class="mb-4">
-                        I thrive in collaborative environments, translating complex requirements into elegant, functional solutions. My experience at companies like <span class="text-teal">Pump Academy</span> and <span class="text-teal">Azentio</span> has allowed me to hone my skills in Java, Spring Boot, and cloud technologies like AWS, delivering projects that significantly improve performance and efficiency.
-                    </p>
-                    <p>
-                        Here are a few of the technologies I've been working with recently:
-                    </p>
-                </div>
-                <div class="md:col-span-2 flex justify-center items-center scroll-reveal" style="transition-delay: 100ms;">
-                    <div class="w-64 h-64 rounded-full bg-slate-800 border-2 border-teal relative overflow-hidden group">
-                        <img src="https://placehold.co/300x300/0a192f/38b2ac?text=VJ" alt="Vivek Jain" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="skill-card bg-slate-800 p-6 rounded-lg shadow-lg transition-all duration-300 scroll-reveal">
-                    <h3 class="text-xl font-bold mb-2 text-slate-100">Languages</h3>
-                    <ul class="space-y-2">
-                        <li><i class="fas fa-check text-teal mr-2"></i>Java</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>JavaScript/TypeScript</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>Python</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>SQL</li>
-                    </ul>
-                </div>
-                <div class="skill-card bg-slate-800 p-6 rounded-lg shadow-lg transition-all duration-300 scroll-reveal" style="transition-delay: 100ms;">
-                    <h3 class="text-xl font-bold mb-2 text-slate-100">Frameworks</h3>
-                    <ul class="space-y-2">
-                        <li><i class="fas fa-check text-teal mr-2"></i>Spring Boot</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>Node.js / Express.js</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>React</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>Django</li>
-                    </ul>
-                </div>
-                <div class="skill-card bg-slate-800 p-6 rounded-lg shadow-lg transition-all duration-300 scroll-reveal" style="transition-delay: 200ms;">
-                    <h3 class="text-xl font-bold mb-2 text-slate-100">Tools & Databases</h3>
-                    <ul class="space-y-2">
-                        <li><i class="fas fa-check text-teal mr-2"></i>GIT & GitHub</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>PostgreSQL, MySQL</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>MongoDB, Cassandra</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>Docker</li>
-                    </ul>
-                </div>
-                <div class="skill-card bg-slate-800 p-6 rounded-lg shadow-lg transition-all duration-300 scroll-reveal" style="transition-delay: 300ms;">
-                    <h3 class="text-xl font-bold mb-2 text-slate-100">Platforms & Skills</h3>
-                    <ul class="space-y-2">
-                        <li><i class="fas fa-check text-teal mr-2"></i>AWS, Azure</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>Linux</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>System Design</li>
-                        <li><i class="fas fa-check text-teal mr-2"></i>Problem Solving</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Experience Section -->
-        <section id="experience" class="py-24">
-            <h2 class="text-3xl font-bold text-slate-100 mb-12 flex items-center scroll-reveal">
-                <span class="text-teal mr-4">02.</span> Where I've Worked
-                <span class="flex-grow h-px bg-slate-700 ml-6"></span>
-            </h2>
-            
-            <div class="relative scroll-reveal">
-                <!-- Vertical Line -->
-                <div class="hidden md:block absolute w-px h-full bg-slate-700 top-0 left-1/2 -translate-x-1/2"></div>
-                
-                <!-- Experience Item 1 -->
-                <div class="relative md:flex items-start md:w-1/2 md:pr-12 mb-12">
-                    <div class="md:ml-auto md:text-right">
-                        <p class="text-teal font-semibold text-lg">Feb 2025 - Present</p>
-                        <h3 class="text-2xl font-bold text-slate-100 mt-1">Software Engineer</h3>
-                        <p class="text-xl text-slate-300">Pump Academy Private Limited</p>
-                    </div>
-                    <div class="hidden md:block absolute w-4 h-4 rounded-full bg-teal top-1 right-0 -mr-2 translate-x-1/2"></div>
-                    <div class="relative mt-4 md:mt-0 md:w-full md:pl-12">
-                         <div class="p-6 bg-slate-800 rounded-lg shadow-lg border-l-4 border-teal">
-                            <ul class="list-disc list-inside space-y-2 text-slate-400">
-                                <li>Reduced API response time by 30% by implementing efficient RESTful services.</li>
-                                <li>Rebuilt the iPUMPNET dashboard from the ground up using Java & Spring Boot.</li>
-                                <li>Decreased deployment time by 50% by automating CI/CD pipelines on AWS.</li>
-                                <li>Cut operational costs by 40% through strategic migration to AWS infrastructure.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Experience Item 2 -->
-                 <div class="relative md:flex flex-row-reverse items-start md:w-full mb-12">
-                    <div class="md:w-1/2 md:pl-12">
-                         <p class="text-teal font-semibold text-lg">Aug 2023 - Sep 2024</p>
-                         <h3 class="text-2xl font-bold text-slate-100 mt-1">Software Engineer Trainee</h3>
-                         <p class="text-xl text-slate-300">Azentio Software</p>
-                    </div>
-                    <div class="hidden md:block absolute w-4 h-4 rounded-full bg-teal top-1 left-1/2 -translate-x-1/2"></div>
-                    <div class="relative mt-4 md:mt-0 md:w-1/2 md:pr-12">
-                         <div class="p-6 bg-slate-800 rounded-lg shadow-lg border-r-4 md:border-r-0 md:border-l-4 border-teal">
-                            <ul class="list-disc list-inside space-y-2 text-slate-400">
-                                <li>Increased system scalability and reduced downtime by 25% with a microservices architecture.</li>
-                                <li>Engineered REST APIs capable of handling 10k concurrent requests.</li>
-                                <li>Improved application performance by 40% through query optimization and Redis caching.</li>
-                                <li>Enhanced user engagement by 25% by implementing real-time features with WebSockets.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- Projects Section -->
-        <section id="projects" class="py-24">
-            <h2 class="text-3xl font-bold text-slate-100 mb-12 flex items-center scroll-reveal">
-                <span class="text-teal mr-4">03.</span> Things I've Built
-                <span class="flex-grow h-px bg-slate-700 ml-6"></span>
-            </h2>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Project 1 -->
-                <div class="project-card bg-slate-800 p-6 rounded-lg shadow-lg flex flex-col justify-between border-2 border-transparent transition-colors duration-300 scroll-reveal">
-                    <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <i class="fas fa-book text-3xl text-teal"></i>
-                            <div class="text-right">
-                                <a href="#" class="text-slate-400 hover:text-teal transition-colors"><i class="fab fa-github text-2xl"></i></a>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-100 mb-2">Book Review Platform</h3>
-                        <p class="text-slate-400 mb-4">A platform for users to discover, review, and track their favorite books, ensuring scalability and security.</p>
-                    </div>
-                    <div class="text-xs text-slate-500 font-mono">
-                        <span>Spring Boot</span> &bull; <span>Apache Cassandra</span> &bull; <span>Spring Security</span> &bull; <span>Thymeleaf</span>
-                    </div>
-                </div>
-                <!-- Project 2 -->
-                <div class="project-card bg-slate-800 p-6 rounded-lg shadow-lg flex flex-col justify-between border-2 border-transparent transition-colors duration-300 scroll-reveal" style="transition-delay: 100ms;">
-                     <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <i class="fas fa-handshake text-3xl text-teal"></i>
-                             <div class="text-right">
-                                <a href="#" class="text-slate-400 hover:text-teal transition-colors"><i class="fab fa-github text-2xl"></i></a>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-100 mb-2">CRM Leads</h3>
-                        <p class="text-slate-400 mb-4">A CRM system for businesses to manage potential customers by assigning leads to agents and viewing progress dashboards.</p>
-                    </div>
-                    <div class="text-xs text-slate-500 font-mono">
-                       <span>Django</span> &bull; <span>Python</span> &bull; <span>SQL</span>
-                    </div>
-                </div>
-                 <!-- Project 3 -->
-                <div class="project-card bg-slate-800 p-6 rounded-lg shadow-lg flex flex-col justify-between border-2 border-transparent transition-colors duration-300 scroll-reveal" style="transition-delay: 200ms;">
-                     <div>
-                        <div class="flex justify-between items-center mb-4">
-                             <i class="fas fa-receipt text-3xl text-teal"></i>
-                             <div class="text-right">
-                                <a href="#" class="text-slate-400 hover:text-teal transition-colors"><i class="fab fa-github text-2xl"></i></a>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-100 mb-2">Expense Splitter "ShareFlow"</h3>
-                        <p class="text-slate-400 mb-4">A full-stack expense sharing platform, similar to Splitwise, for managing group expenses with a real-time tracking interface.</p>
-                    </div>
-                    <div class="text-xs text-slate-500 font-mono">
-                        <span>Angular</span> &bull; <span>Spring Boot</span> &bull; <span>PostgreSQL</span> &bull; <span>AWS</span> &bull; <span>JWT</span>
-                    </div>
-                </div>
-                 <!-- Project 4 (Freelance) -->
-                <div class="project-card bg-slate-800 p-6 rounded-lg shadow-lg flex flex-col justify-between border-2 border-transparent transition-colors duration-300 scroll-reveal" style="transition-delay: 300ms;">
-                     <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <i class="fas fa-comments text-3xl text-teal"></i>
-                             <div class="text-right">
-                                <a href="#" class="text-slate-400 hover:text-teal transition-colors"><i class="fab fa-github text-2xl"></i></a>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-100 mb-2">Real-time Messenger App</h3>
-                        <p class="text-slate-400 mb-4">A freelance project to compose an instant messaging application using WebSockets for seamless, low-latency communication.</p>
-                    </div>
-                    <div class="text-xs text-slate-500 font-mono">
-                       <span>WebSockets</span> &bull; <span>Node.js</span> &bull; <span>JavaScript</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-24 text-center">
-             <h2 class="text-2xl font-bold text-teal mb-2 scroll-reveal">04. What's Next?</h2>
-            <h3 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 scroll-reveal" style="transition-delay: 100ms;">Get In Touch</h3>
-            <p class="max-w-xl mx-auto text-lg mb-8 scroll-reveal" style="transition-delay: 200ms;">
-                I'm currently open to new opportunities and my inbox is always open. Whether you have a question or just want to say hi, I'll do my best to get back to you!
-            </p>
-            <a href="mailto:vivek.jainism@gmail.com" class="inline-block bg-teal border border-teal text-white font-semibold py-4 px-8 rounded-lg hover:bg-transparent hover:text-teal transition-colors duration-300 scroll-reveal" style="transition-delay: 300ms;">
-                Say Hello
-            </a>
-
-            <div class="flex justify-center space-x-8 mt-16 scroll-reveal" style="transition-delay: 400ms;">
-                <a href="https://www.linkedin.com/" target="_blank" class="text-slate-400 hover:text-teal transition-colors duration-300 text-3xl"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/" target="_blank" class="text-slate-400 hover:text-teal transition-colors duration-300 text-3xl"><i class="fab fa-github"></i></a>
-                <a href="https://leetcode.com/" target="_blank" class="text-slate-400 hover:text-teal transition-colors duration-300 text-3xl"><i class="fas fa-code"></i></a>
-            </div>
-        </section>
-
-    </main>
-    
-    <!-- Footer -->
-    <footer class="py-6 text-center text-slate-400 text-sm">
-        <p>Designed & Built by Vivek Jain &copy; 2024</p>
-    </footer>
-    
-    <!-- Back to top button -->
-    <button id="to-top-button" title="Go To Top"
-        class="hidden fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md bg-teal text-white text-lg font-semibold transition-opacity duration-300">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Menu Toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // Close mobile menu when a link is clicked
-            const mobileNavLinks = mobileMenu.querySelectorAll('a');
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
-
-
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if(targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-
-            // Scroll reveal animation
-            const revealElements = document.querySelectorAll('.scroll-reveal');
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            revealElements.forEach(el => {
-                revealObserver.observe(el);
-            });
-            
-            // Header shadow on scroll
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                if(window.scrollY > 50) {
-                    header.classList.add('shadow-lg');
-                } else {
-                    header.classList.remove('shadow-lg');
+        // --- DATA ---
+        const data = {
+            profile: {
+                name: "Vivek Jain",
+                summary: "Results-driven Software Engineer with 1.5 years of experience in developing and maintaining Java/Spring Boot applications with microservices architecture. Skilled in building RESTful APIs, optimizing database performance, and implementing CI/CD pipelines.",
+                contact: { email: "vivek.jainism@gmail.com", linkedin: "https://linkedin.com/in/jainismvivek", github: "https://github.com/jainismvivek" }
+            },
+            experience: [
+                {
+                    company: "Pump Academy",
+                    role: "Software Engineer",
+                    date: "Feb 2025 – Present",
+                    desc: "Improved system response time by 30% for iPumpNET.",
+                    tags: ["Java", "Spring Boot", "Redis", "Microservices"],
+                    details: [
+                        "Architected RESTful APIs serving real-time sensor data.",
+                        "Integrated AI-powered predictive maintenance for 78+ industrial units.",
+                        "Optimized SQL queries reducing load time from 8s to 2s."
+                    ]
+                },
+                {
+                    company: "Azentio",
+                    role: "Software Engineer Trainee",
+                    date: "Feb 2023 – Sep 2024",
+                    desc: "Modernized legacy compliance workflows.",
+                    tags: ["Spring Data JPA", "Hibernate", "React", "Docker"],
+                    details: [
+                        "Designed backend microservices for AMLock banking compliance.",
+                        "Configured CI/CD pipelines using Jenkins and Docker.",
+                        "Refactored legacy code using modern design patterns."
+                    ]
+                },
+                {
+                    company: "Freelance",
+                    role: "Full Stack Engineer",
+                    date: "Ongoing",
+                    desc: "Delivering scalable solutions for diverse clients.",
+                    tags: ["System Design", "Cloud Architecture", "API Development"],
+                    details: [
+                        "Building custom backend solutions for international clients.",
+                        "Developing high-performance SPAs with React and Java.",
+                        "Consulting on database optimization and scalable architecture."
+                    ]
                 }
-            });
+            ],
+            skills: {
+                "Languages": ["Java", "SQL", "Python", "JavaScript", "TypeScript"],
+                "Frameworks": ["Spring Boot", "Spring Security", "Hibernate", "ReactJS", "Angular"],
+                "Tools": ["Docker", "Kafka", "Airflow", "Jenkins", "Git", "Maven"],
+                "Databases": ["MySQL", "PostgreSQL", "MongoDB", "Redis"]
+            },
+            projects: [
+                { title: "Distributed Task Scheduler", tech: "Java, Kafka", desc: "Fault-tolerant job scheduling system capable of handling concurrent jobs across multiple nodes with automatic retry mechanisms." },
+                { title: "E-Commerce Microservices", tech: "Spring Cloud", desc: "Order management system featuring isolated inventory and billing services deployed via Docker containers." },
+                { title: "AI Anomaly Dashboard", tech: "Python, React", desc: "Real-time visualization dashboard consuming ML model outputs to display system health metrics." },
+                { title: "Smart Traffic Monitor", tech: "IoT, Python", desc: "Simulated traffic flow analysis using computer vision and edge computing principles." }
+            ]
+        };
 
-            // Back to top button
-            const toTopButton = document.getElementById('to-top-button');
-            window.onscroll = () => {
-                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-                    toTopButton.classList.remove('hidden');
-                } else {
-                    toTopButton.classList.add('hidden');
-                }
+        // --- COMPONENTS ---
+
+        const Navbar = ({ isDark, toggleTheme }) => (
+            <nav className={`fixed w-full z-50 transition-colors duration-300 ${isDark ? 'bg-black/90 border-white/10' : 'bg-white/90 border-gray-200'} backdrop-blur-md border-b`}>
+                <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+                    <div className="text-xl font-medium tracking-tight flex items-center gap-2">
+                        <div className={`h-8 w-8 rounded-lg flex items-center justify-center text-white font-bold ${isDark ? 'bg-gradient-to-tr from-blue-500 to-purple-500' : 'bg-blue-600'}`}>V</div>
+                        <span className={isDark ? 'text-white' : 'text-gray-600'}>
+                            Vivek<span className={isDark ? 'font-bold text-white' : 'font-bold text-gray-800'}>One</span>
+                        </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-6">
+                        <div className="hidden md:flex gap-8 text-sm font-medium">
+                            {['Experience', 'Skills', 'Projects'].map(item => (
+                                <a key={item} href={`#${item.toLowerCase()}`} className={`transition-colors ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-blue-600'}`}>
+                                    {item}
+                                </a>
+                            ))}
+                        </div>
+                        <button onClick={toggleTheme} className={`p-2 rounded-full transition-colors ${isDark ? 'text-yellow-400 hover:bg-white/10' : 'text-gray-600 hover:bg-gray-100'}`}>
+                            <Icon path={isDark ? Icons.Sun : Icons.Moon} size={20} />
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        );
+
+        // --- REUSABLE SLIDER COMPONENT ---
+        const SectionSlider = ({ isDark, children, title, subtitle }) => {
+            const scrollRef = useRef(null);
+            
+            const scroll = (offset) => {
+                if (scrollRef.current) scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
             };
-            toTopButton.onclick = () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
+
+            return (
+                <div className="max-w-7xl mx-auto px-6 py-10">
+                    <div className="flex justify-between items-end mb-8">
+                        <div>
+                            <h2 className={`text-3xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{title}</h2>
+                            <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>{subtitle}</p>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={() => scroll(-300)} className={`p-3 rounded-full border transition-all ${isDark ? 'border-white/10 hover:bg-white/10 text-white' : 'border-gray-300 hover:bg-gray-100 text-gray-700'}`}>
+                                <Icon path={Icons.ArrowLeft}/>
+                            </button>
+                            <button onClick={() => scroll(300)} className={`p-3 rounded-full border transition-all ${isDark ? 'border-white/10 hover:bg-white/10 text-white' : 'border-gray-300 hover:bg-gray-100 text-gray-700'}`}>
+                                <Icon path={Icons.ArrowRight}/>
+                            </button>
+                        </div>
+                    </div>
+                    <div ref={scrollRef} className="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory py-4">
+                        {children}
+                    </div>
+                </div>
+            );
+        };
+
+        const ExperienceCard = ({ job, isDark }) => (
+            <div className="min-w-[85vw] md:min-w-[450px] snap-center h-full">
+                <div className={isDark ? "gemini-border h-full p-[1px]" : "h-full"}>
+                    <div className={`h-full rounded-[1.4rem] p-8 flex flex-col relative overflow-hidden group border transition-all ${isDark ? 'bg-[#1E1F20] border-transparent' : 'bg-white border-gray-200 shadow-md hover:shadow-lg'}`}>
+                        {isDark && <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full group-hover:bg-blue-500/20 transition-all"></div>}
+                        
+                        <div className="relative z-10">
+                            <div className="flex justify-between items-start mb-4">
+                                <h3 className={`text-2xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{job.company}</h3>
+                                <span className={`text-xs font-mono px-2 py-1 rounded ${isDark ? 'text-blue-400 bg-blue-500/10' : 'text-blue-700 bg-blue-50'}`}>{job.date}</span>
+                            </div>
+                            <p className={`text-lg font-medium mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{job.role}</p>
+                            
+                            <div className="mb-6 flex flex-wrap gap-2">
+                                {job.tags.map((tag, tIdx) => (
+                                    <span key={tIdx} className={`text-xs px-2 py-1 rounded-full border ${isDark ? 'text-gray-400 border-white/10' : 'text-gray-600 border-gray-200 bg-gray-50'}`}>{tag}</span>
+                                ))}
+                            </div>
+
+                            <ul className="space-y-3 mb-6 flex-grow">
+                                {job.details.map((detail, dIdx) => (
+                                    <li key={dIdx} className={`flex items-start text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                        <span className={`mr-2 mt-1 ${isDark ? 'text-blue-400' : 'text-green-500'}`}>▹</span>{detail}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <div className={`pt-4 border-t ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
+                                <p className={`text-sm font-medium ${isDark ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400' : 'text-blue-700'}`}>
+                                    Key Impact: {job.desc}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ProjectCard = ({ proj, isDark }) => (
+            <div className="min-w-[300px] md:min-w-[350px] snap-center">
+                <div className={`rounded-2xl p-6 h-full flex flex-col transition-all border ${isDark ? 'bg-[#2D2E30] border-white/5 hover:border-white/20 text-white' : 'bg-white border-gray-200 hover:shadow-lg text-gray-900'}`}>
+                    <div className="flex justify-between items-start mb-4">
+                        <div className={`p-2 rounded-lg ${isDark ? 'bg-black/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                            <Icon path={Icons.Code} size={24} />
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-medium mb-2">{proj.title}</h3>
+                    <p className={`text-sm mb-3 font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{proj.tech}</p>
+                    <p className={`text-sm leading-relaxed flex-grow ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{proj.desc}</p>
+                </div>
+            </div>
+        );
+
+        // --- NEW SECTIONS FROM GOOGLE ONE PAGE ---
+        
+        // "Boost Productivity" -> "Services & Workflow"
+        const ServicesSection = ({ isDark }) => (
+            <section className={`py-16 ${isDark ? 'bg-[#131314]' : 'bg-white'}`}>
+                <div className="max-w-7xl mx-auto px-6">
+                    <h2 className={`text-3xl font-medium mb-12 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        Services & Workflows
+                    </h2>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {/* Service 1 */}
+                        <div className={`rounded-3xl overflow-hidden flex flex-col ${isDark ? 'bg-[#1E1F20]' : 'bg-[#F0F4F8]'}`}>
+                            <div className="h-40 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                                <Icon path={Icons.Server} size={48} className="text-white/90" />
+                            </div>
+                            <div className="p-8">
+                                <h3 className={`text-xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Scalable API Architecture</h3>
+                                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Design and implementation of fault-tolerant microservices that can handle high concurrency and massive data loads.
+                                </p>
+                            </div>
+                        </div>
+                        {/* Service 2 */}
+                        <div className={`rounded-3xl overflow-hidden flex flex-col ${isDark ? 'bg-[#1E1F20]' : 'bg-[#F0F4F8]'}`}>
+                            <div className="h-40 bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center">
+                                <Icon path={Icons.Sparkles} size={48} className="text-white/90" />
+                            </div>
+                            <div className="p-8">
+                                <h3 className={`text-xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>AI & ML Integration</h3>
+                                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Integrating predictive models and LLMs into traditional backend systems for smarter, data-driven applications.
+                                </p>
+                            </div>
+                        </div>
+                        {/* Service 3 */}
+                        <div className={`rounded-3xl overflow-hidden flex flex-col ${isDark ? 'bg-[#1E1F20]' : 'bg-[#F0F4F8]'}`}>
+                            <div className="h-40 bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center">
+                                <Icon path={Icons.Database} size={48} className="text-white/90" />
+                            </div>
+                            <div className="p-8">
+                                <h3 className={`text-xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Database Optimization</h3>
+                                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Query tuning, indexing strategies, and caching implementation (Redis) to reduce latency and infrastructure costs.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // "Study Smarter" -> "Continuous Learning"
+        const LearningSection = ({ isDark }) => (
+            <section className={`py-16 ${isDark ? 'bg-[#1E1F20] border-y border-white/5' : 'bg-gray-50'}`}>
+                 <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                             <h2 className={`text-3xl font-medium mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                Continuous Learning
+                            </h2>
+                            <p className={`text-lg mb-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Staying ahead of the curve. I dedicate time weekly to exploring deep tech and emerging architectures.
+                            </p>
+                            
+                            <div className="space-y-4">
+                                <div className={`flex items-center gap-4 p-4 rounded-xl ${isDark ? 'bg-[#2D2E30]' : 'bg-white shadow-sm'}`}>
+                                    <div className="bg-orange-100 text-orange-600 p-2 rounded-lg"><Icon path={Icons.Search} /></div>
+                                    <div>
+                                        <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Deep Research</h4>
+                                        <p className="text-sm text-gray-500">Currently exploring: Event-Driven Architecture Patterns</p>
+                                    </div>
+                                </div>
+                                <div className={`flex items-center gap-4 p-4 rounded-xl ${isDark ? 'bg-[#2D2E30]' : 'bg-white shadow-sm'}`}>
+                                    <div className="bg-blue-100 text-blue-600 p-2 rounded-lg"><Icon path={Icons.Cpu} /></div>
+                                    <div>
+                                        <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>System Design</h4>
+                                        <p className="text-sm text-gray-500">Studying high-scale distributed locking mechanisms</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Visual Card Stack */}
+                        <div className="relative h-80 w-full flex items-center justify-center">
+                            <div className={`absolute w-64 h-80 rounded-2xl rotate-[-6deg] border ${isDark ? 'bg-[#2D2E30] border-white/10' : 'bg-white border-gray-200 shadow-lg'}`}></div>
+                            <div className={`absolute w-64 h-80 rounded-2xl rotate-[6deg] z-10 border overflow-hidden ${isDark ? 'bg-[#131314] border-white/10' : 'bg-white border-gray-200 shadow-xl'}`}>
+                                <div className="h-full p-6 flex flex-col justify-between">
+                                    <div className="text-4xl font-mono opacity-10">0101</div>
+                                    <div>
+                                        <div className="h-2 w-12 bg-blue-500 rounded mb-2"></div>
+                                        <h3 className={`text-xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Backend Mastery</h3>
+                                        <p className="text-sm text-gray-500 mt-2">Always pushing for cleaner, faster, and more reliable code.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+        );
+
+        const SkillList = ({ category, items }) => (
+            <div className="flex flex-col sm:flex-row py-4 border-b border-gray-100 items-start sm:items-center">
+                <div className="w-40 font-medium text-gray-900 flex items-center gap-2 mb-2 sm:mb-0">
+                    <span className="text-blue-600">
+                        {category === 'Languages' && <Icon path={Icons.Code} size={18} />}
+                        {category === 'Frameworks' && <Icon path={Icons.Server} size={18} />}
+                        {category === 'Tools' && <Icon path={Icons.Zap} size={18} />}
+                        {category === 'Databases' && <Icon path={Icons.Database} size={18} />}
+                    </span>
+                    {category}
+                </div>
+                <div className="flex flex-wrap gap-2 flex-1">
+                    {items.map((skill, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm text-gray-700 shadow-sm">
+                            {skill}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const TechSection = ({ isDark }) => (
+            <section id="skills" className={`py-20 px-6 max-w-7xl mx-auto ${isDark ? '' : 'bg-gray-50 mt-10'}`}>
+                 <div className="text-center mb-12">
+                    <h2 className={`text-3xl font-medium mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Technical Arsenal</h2>
+                    <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>The tools I use to deliver scalable solutions.</p>
+                 </div>
+
+                 {/* CONDITIONAL RENDERING: CARD GRID (DARK) vs LIST (LIGHT) */}
+                 {isDark ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {Object.entries(data.skills).map(([category, items], idx) => (
+                            <div key={idx} className="bg-[#1E1F20] border border-white/5 rounded-2xl p-6 hover:border-blue-400/30 transition-colors">
+                                <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
+                                    {category === 'Languages' && <Icon path={Icons.Code} size={20} className="text-blue-500"/>}
+                                    {category === 'Frameworks' && <Icon path={Icons.Server} size={20} className="text-purple-400"/>}
+                                    {category === 'Tools' && <Icon path={Icons.Zap} size={20} className="text-yellow-500"/>}
+                                    {category === 'Databases' && <Icon path={Icons.Database} size={20} className="text-green-500"/>}
+                                    {category}
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {items.map((skill, sIdx) => (
+                                        <span key={sIdx} className="text-sm text-gray-400 bg-white/5 px-3 py-1 rounded-lg">{skill}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                 ) : (
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-6 py-2">
+                        {Object.entries(data.skills).map(([category, items], idx) => (
+                            <SkillList key={idx} category={category} items={items} />
+                        ))}
+                    </div>
+                 )}
+            </section>
+        );
+
+        const GeminiChat = ({ isDark }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [messages, setMessages] = useState([{ sender: 'bot', text: "Hello! I'm Vivek's AI Agent. Ask me about his Java experience, freelancing rates, or projects." }]);
+            const [input, setInput] = useState("");
+            const [loading, setLoading] = useState(false);
+            const bottomRef = useRef(null);
+
+            useEffect(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, isOpen]);
+
+            const callGeminiAPI = async (query) => {
+                setLoading(true);
+                const sysPrompt = `You are an AI assistant for Vivek Jain's portfolio. 
+                Data: ${JSON.stringify(data)}. 
+                Tone: Professional, confident, concise.
+                Rules: Emphasize his 30% optimization impact. If asked about freelancing, say he is available and open to discuss backend/fullstack projects.
+                Current User Query: ${query}`;
+
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: query }] }],
+                            systemInstruction: { parts: [{ text: sysPrompt }] }
+                        })
+                    });
+                    const json = await res.json();
+                    const reply = json.candidates?.[0]?.content?.parts?.[0]?.text || "I'm having trouble connecting to the server.";
+                    setMessages(prev => [...prev, { sender: 'bot', text: reply }]);
+                } catch (e) {
+                    setMessages(prev => [...prev, { sender: 'bot', text: "Error connecting to AI." }]);
+                }
+                setLoading(false);
+            };
+
+            const handleSend = () => {
+                if (!input.trim()) return;
+                setMessages(prev => [...prev, { sender: 'user', text: input }]);
+                const query = input;
+                setInput("");
+                callGeminiAPI(query);
+            };
+
+            return (
+                <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+                    {isOpen && (
+                        <div className={`w-80 md:w-96 rounded-2xl shadow-2xl mb-4 overflow-hidden flex flex-col max-h-[500px] border ${isDark ? 'bg-[#1E1F20] border-white/10' : 'bg-white border-gray-200'}`}>
+                            <div className={`p-4 border-b flex justify-between items-center ${isDark ? 'bg-[#2D2E30] border-white/5' : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'}`}>
+                                <div className="flex items-center gap-2 font-medium">
+                                    <span className={isDark ? 'text-blue-400' : 'text-white'}><Icon path={Icons.Sparkles} size={16}/></span>
+                                    AI Assistant
+                                </div>
+                                <button onClick={() => setIsOpen(false)} className={isDark ? 'text-gray-400 hover:text-white' : 'text-white/80 hover:text-white'}><Icon path={Icons.X} size={18}/></button>
+                            </div>
+                            <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isDark ? 'bg-[#131314]' : 'bg-gray-50'}`}>
+                                {messages.map((m, i) => (
+                                    <div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm leading-relaxed ${
+                                            m.sender === 'user' 
+                                            ? 'bg-blue-600 text-white rounded-br-none' 
+                                            : isDark 
+                                                ? 'bg-[#2D2E30] text-gray-200 border border-white/5 rounded-bl-none' 
+                                                : 'bg-white text-gray-800 border border-gray-100 shadow-sm rounded-bl-none'
+                                        }`}>
+                                            {m.sender === 'bot' ? <div dangerouslySetInnerHTML={{__html: m.text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}}/> : m.text}
+                                        </div>
+                                    </div>
+                                ))}
+                                {loading && (
+                                    <div className="flex justify-start">
+                                        <div className={`rounded-2xl px-4 py-3 flex gap-1 ${isDark ? 'bg-[#2D2E30]' : 'bg-white border border-gray-100'}`}>
+                                            <div className="w-1.5 h-1.5 bg-gray-500 rounded-full typing-dot"></div>
+                                            <div className="w-1.5 h-1.5 bg-gray-500 rounded-full typing-dot"></div>
+                                            <div className="w-1.5 h-1.5 bg-gray-500 rounded-full typing-dot"></div>
+                                        </div>
+                                    </div>
+                                )}
+                                <div ref={bottomRef}></div>
+                            </div>
+                            <div className={`p-3 border-t flex gap-2 ${isDark ? 'bg-[#1E1F20] border-white/5' : 'bg-white border-gray-100'}`}>
+                                <input 
+                                    className={`flex-1 text-sm rounded-full px-4 py-2 focus:outline-none focus:ring-1 border ${isDark ? 'bg-[#131314] text-white border-white/10 focus:ring-blue-400' : 'bg-gray-100 text-gray-800 border-transparent focus:ring-blue-500'}`}
+                                    placeholder="Ask about Vivek..."
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
+                                    onKeyPress={e => e.key === 'Enter' && handleSend()}
+                                />
+                                <button onClick={handleSend} className={`p-2 rounded-full transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
+                                    <Icon path={Icons.Send} size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    <button 
+                        onClick={() => setIsOpen(!isOpen)}
+                        className={`p-4 rounded-full text-white shadow-lg hover:scale-105 transition-transform group ${isDark ? 'bg-gemini-gradient' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}
+                    >
+                        {isOpen ? <Icon path={Icons.X} /> : <Icon path={Icons.Sparkles} className="group-hover:animate-pulse"/>}
+                    </button>
+                </div>
+            );
+        };
+
+        const Hero = ({ isDark }) => (
+            <section id="about" className="pt-32 pb-20 px-6 max-w-7xl mx-auto text-center">
+                <div className={`inline-block mb-6 px-4 py-1.5 rounded-full border text-sm font-medium animate-fade-in-up ${isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'bg-blue-100 text-blue-800 border-transparent'}`}>
+                    <span className="mr-2">✨</span> Open for Freelance & Full-time
+                </div>
+                
+                <h1 className={`text-4xl md:text-7xl font-medium tracking-tight mb-6 ${isDark ? 'bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400' : 'text-gray-900'}`}>
+                    Power your backend with <br />
+                    <span className={`bg-clip-text text-transparent ${isDark ? 'bg-gemini-text' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
+                        business impact.
+                    </span>
+                </h1>
+                
+                <p className={`text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {data.profile.summary}
+                </p>
+                
+                <div className="flex flex-wrap justify-center gap-4">
+                    <a href={data.profile.contact.linkedin} target="_blank" className={`px-8 py-3 rounded-full font-medium flex items-center gap-2 transition-all ${isDark ? 'bg-gemini-gradient text-white hover:opacity-90' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg'}`}>
+                        LinkedIn <Icon path={Icons.Linkedin} size={18} />
+                    </a>
+                    <a href={data.profile.contact.github} target="_blank" className={`px-8 py-3 rounded-full font-medium flex items-center gap-2 border transition-all ${isDark ? 'border-white/20 text-white hover:bg-white/10' : 'border-gray-300 text-blue-600 hover:bg-blue-50'}`}>
+                        GitHub <Icon path={Icons.Github} size={18} />
+                    </a>
+                </div>
+            </section>
+        );
+
+        const App = () => {
+            const [isDark, setIsDark] = useState(false);
+
+            useEffect(() => {
+                const root = window.document.documentElement;
+                if (isDark) {
+                    root.classList.add('dark');
+                } else {
+                    root.classList.remove('dark');
+                }
+            }, [isDark]);
+
+            return (
+                <div className="min-h-screen">
+                    <Navbar isDark={isDark} toggleTheme={() => setIsDark(!isDark)} />
+                    <Hero isDark={isDark} />
+                    
+                    {/* EXPERIENCE SLIDER (BOTH MODES) */}
+                    <div id="experience" className={isDark ? 'bg-[#1E1F20]/30 border-y border-white/5' : 'bg-white'}>
+                        <SectionSlider isDark={isDark} title="Experience" subtitle="Swipe to see my professional journey.">
+                            {data.experience.map((job, idx) => (
+                                <ExperienceCard key={idx} job={job} isDark={isDark} />
+                            ))}
+                        </SectionSlider>
+                    </div>
+
+                    {/* NEW SECTIONS */}
+                    <ServicesSection isDark={isDark} />
+                    <TechSection isDark={isDark} />
+                    <LearningSection isDark={isDark} />
+
+                    {/* PROJECT SLIDER (BOTH MODES) */}
+                    <div id="projects" className={`py-10 ${isDark ? 'border-t border-white/5' : ''}`}>
+                        <SectionSlider isDark={isDark} title="Featured Projects" subtitle="Academic & Personal Deployments">
+                             {data.projects.map((proj, idx) => (
+                                <ProjectCard key={idx} proj={proj} isDark={isDark} />
+                            ))}
+                        </SectionSlider>
+                    </div>
+
+                    <footer className={`py-10 text-center text-sm border-t mt-10 ${isDark ? 'text-gray-400 border-white/5' : 'text-gray-500 border-gray-200'}`}>
+                        &copy; {new Date().getFullYear()} Vivek Jain. Built with React & Gemini.
+                    </footer>
+                    <GeminiChat isDark={isDark} />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
