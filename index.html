@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivek Jain — Backend Software Engineer</title>
+<meta name="description" content="Vivek Jain — Backend Software Engineer specializing in Java, Spring Boot, and distributed systems. Building Scapia's OTA extranet at Tarento, and Samudra, a live P2P marketplace.">
+
+<script>
+  (function(){
+    var saved = localStorage.getItem('theme');
+    var theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ink:#0E1B2B;
+  --ink-2:#11233A;
+  --ink-3:#16314D;
+  --line: rgba(229,234,240,0.12);
+  --line-strong: rgba(229,234,240,0.22);
+  --text:#ECEFF3;
+  --text-muted:#8FA3B8;
+  --text-faint:#5F7388;
+  --brass:#C98A3E;
+  --brass-soft: rgba(201,138,62,0.14);
+  --signal:#5FBE8B;
+  --signal-soft: rgba(95,190,139,0.14);
+  --nav-bg: rgba(14,27,43,0.86);
+  --hover-bg: rgba(255,255,255,0.03);
+  --chip-bg: rgba(255,255,255,0.04);
+  --radius: 14px;
+  --maxw: 1080px;
+}
+
+html[data-theme="light"]{
+  --ink:#F7F4EC;
+  --ink-2:#EFE9D8;
+  --ink-3:#E4DCC4;
+  --line: rgba(22,33,49,0.13);
+  --line-strong: rgba(22,33,49,0.26);
+  --text:#16243A;
+  --text-muted:#51617A;
+  --text-faint:#83909E;
+  --brass:#A8672A;
+  --brass-soft: rgba(168,103,42,0.12);
+  --signal:#2F8F63;
+  --signal-soft: rgba(47,143,99,0.12);
+  --nav-bg: rgba(247,244,236,0.88);
+  --hover-bg: rgba(22,33,49,0.04);
+  --chip-bg: rgba(22,33,49,0.05);
+}
+
+html{ transition: background-color 0.2s ease; }
+body{ transition: background-color 0.2s ease, color 0.2s ease; }
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--text);
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+
+h1,h2,h3{
+  font-family:'Source Serif 4', Georgia, serif;
+  font-weight:600;
+  margin:0;
+  letter-spacing:-0.01em;
+}
+
+a{color:inherit; text-decoration:none;}
+img{max-width:100%; display:block;}
+
+::selection{ background: var(--brass-soft); color:var(--text); }
+
+:focus-visible{
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 24px;
+}
+
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow .num{ color: var(--brass); }
+.eyebrow::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:var(--line);
+}
+
+/* ============ BLUEPRINT FRAME (signature device) ============ */
+.frame{
+  position:relative;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px;
+}
+.frame::before, .frame::after{
+  content:"";
+  position:absolute;
+  width:14px; height:14px;
+  border:1.5px solid var(--brass);
+  opacity:0.85;
+}
+.frame::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+.frame::after{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed; top:0; left:0; right:0;
+  z-index:50;
+  background:var(--nav-bg);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 24px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.brand{
+  font-family:'Source Serif 4', serif;
+  font-size:17px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+
+.dot{
+  width:7px; height:7px; border-radius:50%;
+  background:var(--signal);
+  box-shadow:0 0 0 0 rgba(95,190,139,0.6);
+  animation:pulse 2.2s infinite;
+}
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(95,190,139,0.45); }
+  70%{ box-shadow:0 0 0 6px rgba(95,190,139,0); }
+  100%{ box-shadow:0 0 0 0 rgba(95,190,139,0); }
+}
+
+.nav-links{
+  display:flex; gap:28px;
+  font-size:14px;
+  font-weight:500;
+}
+.nav-links a{ color:var(--text-muted); transition:color 0.15s; }
+.nav-links a:hover{ color:var(--text); }
+
+.nav-right{ display:flex; align-items:center; gap:12px; }
+
+.theme-toggle{
+  background:none;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:var(--text-muted);
+  width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.theme-toggle:hover{ border-color:var(--text-muted); color:var(--text); background:var(--hover-bg); }
+.theme-toggle .icon-sun, .theme-toggle .icon-moon{ display:none; }
+html[data-theme="dark"] .theme-toggle .icon-sun{ display:block; }
+html[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
+
+.menu-btn{
+  display:none;
+  background:none; border:1px solid var(--line); border-radius:8px;
+  color:var(--text); width:38px; height:38px;
+  align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.menu-btn span{ display:block; width:16px; height:1.5px; background:var(--text); position:relative; }
+.menu-btn span::before, .menu-btn span::after{
+  content:""; position:absolute; left:0; width:16px; height:1.5px; background:var(--text);
+}
+.menu-btn span::before{ top:-5px; }
+.menu-btn span::after{ top:5px; }
+
+.mobile-panel{
+  display:none;
+  position:fixed; top:64px; left:0; right:0;
+  background:var(--ink-2);
+  border-bottom:1px solid var(--line);
+  padding:18px 24px 24px;
+  flex-direction:column;
+  gap:16px;
+  z-index:49;
+}
+.mobile-panel.open{ display:flex; }
+.mobile-panel a{ font-size:15px; color:var(--text-muted); }
+
+/* ============ HERO ============ */
+.hero{
+  padding:148px 0 80px;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap:48px;
+  align-items:start;
+}
+.hero h1{
+  font-size:clamp(34px, 5vw, 54px);
+  line-height:1.12;
+  color:var(--text);
+  margin:18px 0 22px;
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--brass);
+}
+.hero p.lede{
+  font-size:16.5px;
+  color:var(--text-muted);
+  max-width:520px;
+  margin-bottom:30px;
+}
+.cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
+.btn{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:13px;
+  letter-spacing:0.03em;
+  padding:12px 18px;
+  border-radius:9px;
+  border:1px solid var(--line-strong);
+  display:inline-flex; align-items:center; gap:8px;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.btn:hover{ transform:translateY(-1px); }
+.btn-primary{
+  background:var(--brass);
+  color:#1A1106;
+  border-color:var(--brass);
+  font-weight:600;
+}
+.btn-primary:hover{ background:#dd9b4b; }
+.btn-ghost:hover{ border-color:var(--text-muted); background:var(--hover-bg); }
+
+/* status panel */
+.panel{
+  background:var(--ink-2);
+}
+.panel-head{
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--text-faint);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:18px;
+}
+.metric-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:18px 16px;
+}
+.metric{ border-top:1px solid var(--line); padding-top:12px; }
+.metric .label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10.5px;
+  color:var(--text-faint);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:6px;
+}
+.metric .value{
+  font-size:18px;
+  font-weight:600;
+  color:var(--text);
+}
+.metric .value.accent{ color:var(--signal); }
+
+/* ============ SECTIONS ============ */
+section{ padding:64px 0; }
+.section-head{ margin-bottom:36px; }
+.section-head h2{
+  font-size:clamp(26px, 3.2vw, 36px);
+  margin-top:10px;
+}
+.section-sub{
+  color:var(--text-muted);
+  font-size:15px;
+  margin-top:8px;
+  max-width:560px;
+}
+
+/* ============ CHANGELOG (experience) ============ */
+.changelog{ display:flex; flex-direction:column; gap:18px; }
+.entry{
+  display:grid;
+  grid-template-columns: 150px 1fr;
+  gap:24px;
+  padding:26px 0;
+  border-top:1px solid var(--line);
+}
+.entry:first-child{ border-top:none; }
+.entry-meta{ font-family:'IBM Plex Mono', monospace; }
+.version{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:600;
+  color:var(--brass);
+  margin-bottom:8px;
+}
+.version .tag-current{
+  font-size:9.5px;
+  background:var(--signal-soft);
+  color:var(--signal);
+  padding:2px 6px;
+  border-radius:5px;
+  letter-spacing:0.06em;
+}
+.entry-date{ font-size:12px; color:var(--text-faint); }
+.entry-loc{ font-size:12px; color:var(--text-faint); margin-top:4px; }
+
+.entry-body h3{ font-size:21px; color:var(--text); margin-bottom:3px; }
+.entry-role{ font-size:14px; color:var(--text-muted); margin-bottom:14px; font-weight:500; }
+.entry-body ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px; }
+.entry-body li{
+  font-size:14.5px;
+  color:var(--text-muted);
+  padding-left:18px;
+  position:relative;
+  line-height:1.55;
+}
+.entry-body li::before{
+  content:"›";
+  position:absolute; left:0; top:-1px;
+  color:var(--brass);
+  font-family:'IBM Plex Mono', monospace;
+}
+.tag-row{ display:flex; gap:7px; flex-wrap:wrap; margin-top:16px; }
+.tag{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--text-muted);
+  border:1px solid var(--line);
+  padding:4px 9px;
+  border-radius:20px;
+}
+
+@media (max-width:700px){
+  .entry{ grid-template-columns:1fr; gap:8px; }
+}
+
+/* ============ FEATURED PROJECT ============ */
+.feature-card{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:0;
+}
+.feature-top{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  gap:16px; margin-bottom:18px; flex-wrap:wrap;
+}
+.feature-top h3{ font-size:28px; }
+.live-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; letter-spacing:0.05em;
+  color:var(--signal);
+  border:1px solid var(--signal-soft);
+  background:var(--signal-soft);
+  padding:5px 10px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.feature-desc{ color:var(--text-muted); font-size:15px; max-width:640px; margin-bottom:22px; }
+.feature-cols{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:28px;
+  margin-bottom:22px;
+}
+.feature-cols h4{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--text-faint);
+  margin:0 0 12px;
+}
+.feature-cols ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px; }
+.feature-cols li{
+  font-size:14px; color:var(--text-muted);
+  padding-left:18px; position:relative;
+}
+.feature-cols li::before{
+  content:"›"; position:absolute; left:0; top:-1px;
+  color:var(--brass); font-family:'IBM Plex Mono', monospace;
+}
+@media (max-width:700px){
+  .feature-cols{ grid-template-columns:1fr; }
+}
+
+/* ============ STACK (skills) ============ */
+.stack-grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.stack-cell{
+  background:var(--ink);
+  padding:22px 24px;
+}
+.stack-cell h4{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--brass);
+  margin:0 0 14px;
+}
+.chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.chip{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--text-muted);
+  background:var(--chip-bg);
+  padding:5px 10px;
+  border-radius:6px;
+}
+@media (max-width:700px){
+  .stack-grid{ grid-template-columns:1fr; }
+}
+
+/* ============ EDUCATION ============ */
+.edu-row{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  gap:24px; flex-wrap:wrap;
+}
+.edu-row h3{ font-size:20px; margin-bottom:4px; }
+.edu-sub{ color:var(--text-muted); font-size:14px; }
+.edu-meta{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--text-faint);
+  text-align:right;
+}
+.edu-notes{ margin-top:16px; display:flex; gap:7px; flex-wrap:wrap; }
+
+/* ============ FOOTER ============ */
+footer{
+  border-top:1px solid var(--line);
+  padding:48px 0 36px;
+}
+.footer-row{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:24px; flex-wrap:wrap;
+}
+.footer-left h3{ font-size:24px; margin-bottom:8px; }
+.footer-left p{ color:var(--text-muted); font-size:14px; max-width:380px; }
+.footer-links{ display:flex; gap:20px; }
+.footer-links a{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:13px;
+  color:var(--text-muted);
+  border-bottom:1px solid transparent;
+  transition:border-color 0.15s, color 0.15s;
+}
+.footer-links a:hover{ color:var(--brass); border-color:var(--brass); }
+.copyright{
+  margin-top:36px;
+  padding-top:20px;
+  border-top:1px solid var(--line);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11.5px;
+  color:var(--text-faint);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:880px){
+  .nav-links{ display:none; }
+  .menu-btn{ display:flex; }
+  .hero-grid{ grid-template-columns:1fr; gap:32px; }
+  .hero{ padding:120px 0 56px; }
+}
+@media (max-width:520px){
+  .metric-grid{ grid-template-columns:1fr 1fr; }
+  .frame{ padding:20px; }
+  section{ padding:48px 0; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">Vivek Jain</div>
+    <div class="nav-links">
+      <a href="#changelog">Experience</a>
+      <a href="#samudra">Project</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+        <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4 7 7 0 0 0 20 14.5Z"/></svg>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#changelog">Experience</a>
+  <a href="#samudra">Project</a>
+  <a href="#stack">Stack</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="eyebrow"><span class="num">FIG. 00</span> PROFILE</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Backend systems built to stay <em>quiet at 3 a.m.</em></h1>
+        <p class="lede">I'm a software engineer who designs and ships Java &amp; Spring Boot services — the kind that handle real bookings, real money, and real load without anyone needing to babysit them. Currently building the extranet platform behind Scapia at Tarento.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://drive.google.com/uc?export=download&id=1FWoGvaitBgJeBrmSm67lmzcTije9Modp" target="_blank" rel="noopener">Download Résumé ↓</a>
+          <a class="btn btn-ghost" href="mailto:vivek.jainism@gmail.com">Email me</a>
+          <a class="btn btn-ghost" href="https://linkedin.com/in/vivekworks" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn btn-ghost" href="https://github.com/jainismvivek" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+
+      <div class="frame panel">
+        <div class="panel-head"><span>service: vivek-jain</span><span>v3.0</span></div>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="label">Role</div>
+            <div class="value">Software Engineer</div>
+          </div>
+          <div class="metric">
+            <div class="label">Base</div>
+            <div class="value">Bangalore, IN</div>
+          </div>
+          <div class="metric">
+            <div class="label">Experience</div>
+            <div class="value">2+ yrs</div>
+          </div>
+          <div class="metric">
+            <div class="label">Status</div>
+            <div class="value accent">Deployed ●</div>
+          </div>
+          <div class="metric">
+            <div class="label">Core stack</div>
+            <div class="value">Java · Spring</div>
+          </div>
+          <div class="metric">
+            <div class="label">Infra</div>
+            <div class="value">AWS · Docker</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHANGELOG / EXPERIENCE -->
+  <section id="changelog">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">FIG. 01</span> CHANGELOG</div>
+      <h2>Career, versioned</h2>
+      <p class="section-sub">Three releases in, each one shipped under real production constraints.</p>
+    </div>
+
+    <div class="changelog">
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="version">v3.0 <span class="tag-current">current</span></div>
+          <div class="entry-date">Nov 2025 — Present</div>
+          <div class="entry-loc">Bangalore</div>
+        </div>
+        <div class="entry-body">
+          <h3>Tarento Group</h3>
+          <div class="entry-role">Software Engineer</div>
+          <ul>
+            <li>Working with a lean cross-functional team on Scapia's OTA extranet platform — from database schema modelling to AWS resource planning for a multi-tenant architecture built from scratch.</li>
+            <li>Designing and developing RESTful APIs in Java Spring Boot for bidirectional channel manager integration, with real-time rate sync and booking confirmation workflows inside a multi-module Gradle microservices setup.</li>
+            <li>Building core backend modules for property onboarding, calendar-based availability, and ARI (Availability, Rates &amp; Inventory) configuration using Spring Data JPA and Hibernate, with exception handling tuned for consistency across distributed services.</li>
+            <li>Integrating Scapia's extranet as a supplier into existing catalog systems, enabling end-to-end inventory distribution across channel managers — as an IC on backend modules under active production deployment on AWS (RDS, S3, EC2).</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Spring Boot</span><span class="tag">Gradle</span><span class="tag">Hibernate</span><span class="tag">AWS RDS/S3/EC2</span><span class="tag">Multi-tenant</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="version">v2.0</div>
+          <div class="entry-date">Feb 2025 — Jul 2025</div>
+          <div class="entry-loc">Bangalore</div>
+        </div>
+        <div class="entry-body">
+          <h3>Pump Academy</h3>
+          <div class="entry-role">Software Engineer</div>
+          <ul>
+            <li>Built and maintained enterprise Java Spring Boot microservices for the iPUMPNET platform, cutting API response time by 30% through better adherence to REST practices.</li>
+            <li>Found and fixed slow MySQL queries, layered in Redis caching, and ran ongoing performance monitoring to keep real-time data workflows reliable.</li>
+            <li>Picked up exposure to ML/AI integration and data pipelines — supporting backend services that fed analytical and predictive models.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Spring Boot</span><span class="tag">MySQL</span><span class="tag">Redis</span><span class="tag">Performance tuning</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="version">v1.0</div>
+          <div class="entry-date">Feb 2023 — Sep 2024</div>
+          <div class="entry-loc">Hyderabad</div>
+        </div>
+        <div class="entry-body">
+          <h3>Azentio</h3>
+          <div class="entry-role">Software Engineer Trainee</div>
+          <ul>
+            <li>Built backend microservices with Spring Boot, Spring Data JPA, and Hibernate for an enterprise AML compliance platform serving banking clients under strict regulatory requirements.</li>
+            <li>Implemented authentication and authorization with Spring Security, keeping access control compliant across enterprise banking applications.</li>
+            <li>Set up CI/CD with Maven and Docker, took part in peer code reviews, and resolved production issues that kept 99% uptime for critical banking clients.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Spring Security</span><span class="tag">Docker</span><span class="tag">Maven CI/CD</span><span class="tag">AML / Banking</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECT: SAMUDRA -->
+  <section id="samudra">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">FIG. 02</span> DEPLOYED</div>
+      <h2>Samudra Marketplace</h2>
+      <p class="section-sub">A peer-to-peer marketplace, designed and shipped end-to-end — running live, not just on a resume.</p>
+    </div>
+
+    <div class="frame feature-card">
+      <div class="feature-top">
+        <h3>Samudra — P2P Marketplace</h3>
+        <a class="live-badge" href="https://samudra.digital" target="_blank" rel="noopener"><span class="dot" style="width:6px;height:6px;"></span> Live at samudra.digital</a>
+      </div>
+      <p class="feature-desc">A production-grade, full-stack marketplace deployed on AWS EC2 with Docker Compose and Cloudflare HTTPS, currently serving real pilot users in a public live beta — built with a CI-ready Git workflow from day one.</p>
+
+      <div class="feature-cols">
+        <div>
+          <h4>Architecture</h4>
+          <ul>
+            <li>Modular backend split into Identity, Listing, and Messaging microservices on Spring Boot + PostgreSQL.</li>
+            <li>Location-aware listing feeds for geographically relevant results.</li>
+            <li>Event-driven notification pipeline on Apache Kafka, decoupling core domain events from delivery channels.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Stack</h4>
+          <div class="chip-row">
+            <span class="chip">Java 17</span>
+            <span class="chip">Spring Boot</span>
+            <span class="chip">PostgreSQL</span>
+            <span class="chip">Apache Kafka</span>
+            <span class="chip">LangChain4j</span>
+            <span class="chip">Docker</span>
+            <span class="chip">AWS EC2</span>
+            <span class="chip">Cloudflare</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">FIG. 03</span> STACK</div>
+      <h2>What I build with</h2>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-cell">
+        <h4>Languages</h4>
+        <div class="chip-row">
+          <span class="chip">Java</span><span class="chip">SQL</span><span class="chip">JavaScript</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <h4>Frameworks &amp; ORM</h4>
+        <div class="chip-row">
+          <span class="chip">Spring Boot</span><span class="chip">Spring Data JPA</span><span class="chip">Hibernate</span><span class="chip">Spring Security</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <h4>Data &amp; Messaging</h4>
+        <div class="chip-row">
+          <span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Redis</span><span class="chip">Apache Kafka</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <h4>Infra &amp; Tooling</h4>
+        <div class="chip-row">
+          <span class="chip">AWS (EC2 / S3 / RDS)</span><span class="chip">Docker</span><span class="chip">Gradle / Maven</span><span class="chip">Git</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">FIG. 04</span> EDUCATION</div>
+      <h2>Foundation</h2>
+    </div>
+    <div class="frame">
+      <div class="edu-row">
+        <div>
+          <h3>Kumaraguru College of Technology</h3>
+          <div class="edu-sub">Master's of Computer Applications — Minor: Distributed Systems</div>
+        </div>
+        <div class="edu-meta">Coimbatore<br>Graduated May 2023<br>GPA 7.1</div>
+      </div>
+      <div class="edu-notes">
+        <span class="tag">Golden Key Honours Scholar</span>
+        <span class="tag">Software Engineering Practice</span>
+        <span class="tag">Applied Machine Learning</span>
+        <span class="tag">Operating Systems</span>
+        <span class="tag">Algorithms &amp; Data Structures</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="footer-left">
+        <h3>Let's build something that stays up.</h3>
+        <p>Open to backend &amp; full-stack roles, and select freelance work. Based in Bangalore, happy to work async.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://drive.google.com/uc?export=download&id=1FWoGvaitBgJeBrmSm67lmzcTije9Modp" target="_blank" rel="noopener">Resume</a>
+        <a href="mailto:vivek.jainism@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/vivekworks" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/jainismvivek" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="copyright">
+      <span>© <span id="year"></span> Vivek Jain</span>
+      <span>Built static. No build step, no console errors.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  themeToggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    themeToggle.setAttribute('aria-label', next === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+  });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const mobilePanel = document.getElementById('mobilePanel');
+  menuBtn.addEventListener('click', () => {
+    const isOpen = mobilePanel.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen);
+  });
+  mobilePanel.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobilePanel.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
+
+</body>
+</html>
