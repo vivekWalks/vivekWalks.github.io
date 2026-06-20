@@ -152,12 +152,15 @@ img{max-width:100%; display:block;}
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:12px;
 }
 .brand{
   font-family:'Source Serif 4', serif;
   font-size:17px;
   font-weight:600;
   letter-spacing:-0.01em;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 
 .dot{
@@ -176,11 +179,16 @@ img{max-width:100%; display:block;}
   display:flex; gap:28px;
   font-size:14px;
   font-weight:500;
+  flex-shrink:1;
+  overflow-x:auto;
+  white-space:nowrap;
+  scrollbar-width:none;
 }
+.nav-links::-webkit-scrollbar{ display:none; }
 .nav-links a{ color:var(--text-muted); transition:color 0.15s; }
 .nav-links a:hover{ color:var(--text); }
 
-.nav-right{ display:flex; align-items:center; gap:12px; }
+.nav-right{ display:flex; align-items:center; gap:12px; flex-shrink:0; }
 
 .theme-toggle{
   background:none;
@@ -191,38 +199,12 @@ img{max-width:100%; display:block;}
   display:flex; align-items:center; justify-content:center;
   cursor:pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
+  flex-shrink:0;
 }
 .theme-toggle:hover{ border-color:var(--text-muted); color:var(--text); background:var(--hover-bg); }
 .theme-toggle .icon-sun, .theme-toggle .icon-moon{ display:none; }
 html[data-theme="dark"] .theme-toggle .icon-sun{ display:block; }
 html[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
-
-.menu-btn{
-  display:none;
-  background:none; border:1px solid var(--line); border-radius:8px;
-  color:var(--text); width:38px; height:38px;
-  align-items:center; justify-content:center;
-  cursor:pointer;
-}
-.menu-btn span{ display:block; width:16px; height:1.5px; background:var(--text); position:relative; }
-.menu-btn span::before, .menu-btn span::after{
-  content:""; position:absolute; left:0; width:16px; height:1.5px; background:var(--text);
-}
-.menu-btn span::before{ top:-5px; }
-.menu-btn span::after{ top:5px; }
-
-.mobile-panel{
-  display:none;
-  position:fixed; top:64px; left:0; right:0;
-  background:var(--ink-2);
-  border-bottom:1px solid var(--line);
-  padding:18px 24px 24px;
-  flex-direction:column;
-  gap:16px;
-  z-index:49;
-}
-.mobile-panel.open{ display:flex; }
-.mobile-panel a{ font-size:15px; color:var(--text-muted); }
 
 /* ============ HERO ============ */
 .hero{
@@ -509,10 +491,15 @@ footer{
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:880px){
-  .nav-links{ display:none; }
-  .menu-btn{ display:flex; }
   .hero-grid{ grid-template-columns:1fr; gap:32px; }
   .hero{ padding:120px 0 56px; }
+}
+@media (max-width:600px){
+  .nav-inner{ padding:0 16px; gap:8px; }
+  .brand{ font-size:14px; }
+  .nav-links{ gap:14px; font-size:12px; }
+  .nav-right{ gap:8px; }
+  .theme-toggle{ width:32px; height:32px; }
 }
 @media (max-width:520px){
   .metric-grid{ grid-template-columns:1fr 1fr; }
@@ -537,16 +524,9 @@ footer{
         <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
         <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4 7 7 0 0 0 20 14.5Z"/></svg>
       </button>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span></button>
     </div>
   </div>
 </nav>
-<div class="mobile-panel" id="mobilePanel">
-  <a href="#changelog">Experience</a>
-  <a href="#samudra">Project</a>
-  <a href="#stack">Stack</a>
-  <a href="#contact">Contact</a>
-</div>
 
 <main class="wrap">
 
@@ -789,7 +769,6 @@ footer{
     </div>
     <div class="copyright">
       <span>© <span id="year"></span> Vivek Jain</span>
-      <span>Built static. No build step, no console errors.</span>
     </div>
   </div>
 </footer>
@@ -804,19 +783,6 @@ footer{
     root.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
     themeToggle.setAttribute('aria-label', next === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
-  });
-
-  const menuBtn = document.getElementById('menuBtn');
-  const mobilePanel = document.getElementById('mobilePanel');
-  menuBtn.addEventListener('click', () => {
-    const isOpen = mobilePanel.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', isOpen);
-  });
-  mobilePanel.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      mobilePanel.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-    });
   });
 </script>
 
